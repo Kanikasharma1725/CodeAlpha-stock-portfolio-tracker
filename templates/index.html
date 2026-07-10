@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Stock Portfolio Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📈 Web Stock Portfolio Tracker</h1>
+        
+        <div class="flex-box">
+            <!-- Left Side: Add Stock -->
+            <div class="box">
+                <h3>Add Stock to Portfolio</h3>
+                <form action="/add" method="POST">
+                    <label>Select Stock:</head>
+                    <select name="ticker">
+                        {% for ticker, price in stock_prices.items() %}
+                            <option value="{{ ticker }}">{{ ticker }} (${{ price }})</option>
+                        {% endfor %}
+                    </select>
+                    <br><br>
+                    <label>Quantity:</label>
+                    <input type="number" name="quantity" min="1" required>
+                    <br><br>
+                    <button type="submit">Add Share</button>
+                </form>
+                <br>
+                <a href="/clear"><button style="background-color: #d9534f;">Reset Portfolio</button></a>
+            </div>
+
+            <!-- Right Side: Portfolio Summary -->
+            <div class="box">
+                <h3>Your Current Portfolio</h3>
+                <table border="1" cellpadding="10">
+                    <tr><th>Stock</th><th>Quantity</th><th>Total Value</th></tr>
+                    {% for ticker, qty in portfolio.items() %}
+                        <tr>
+                            <td>{{ ticker }}</td>
+                            <td>{{ qty }}</td>
+                            <td>${{ qty * stock_prices[ticker] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <h2>Grand Total: ${{ grand_total }}</h2>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
